@@ -1,0 +1,13 @@
+---
+# tasks file for vpc-subnets
+
+- name: Create Private Subnets
+  ec2_vpc_subnet:
+    state: "{{ whc_state }}"
+    vpc_id: "{{ whc_vpc.vpc.id }}"
+    region: "{{whc_region }}"
+    cidr: "{{ item.cidr }}"
+    resource_tags:
+      Name: "whc-{{ targetenv }}-{{ whc_region }}-{{ item.name }}"
+  with_items: "{{ whc_core_subnets }}"
+  when: whc_state == "present"

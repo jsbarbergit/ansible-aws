@@ -1,0 +1,6 @@
+whc_region: eu-west-2
+whc_cidrblock: 10.124.0.0/17
+whc_state: present
+whc_core_subnets:
+  - {name: "public", cidr: "10.124.0.0/24", description: "WHC POC Public Subnet"}
+  - {name: "private", cidr: "10.124.1.0/24", description: "WHC POC Private Subnet"}

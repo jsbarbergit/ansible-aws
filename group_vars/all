@@ -1,0 +1,13 @@
+#default region is london
+region: eu-west-2
+
+#Array of valid environments
+#Env specific defaults can be set underneath
+environments:
+  poc: []
+  cxp: []
+  cxt: []
+  pp1: []
+  pp2: []
+  pp3: []
+  prd: []

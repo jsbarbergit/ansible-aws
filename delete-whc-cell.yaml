@@ -1,0 +1,64 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars_files:
+    - "vars/whc-cell/{{ targetenv }}.yaml"
+
+  pre_tasks:
+    - name: Validate environment value was passed
+      fail: msg="ERROR --- A valid targetenv value was not passed in extra-vars. Valid values are listed in group_vars/all"
+      when: targetenv is not defined or (targetenv is defined and targetenv not in environments)
+
+  tasks:
+    - name: Fetching VPC Subnet Facts
+      ec2_vpc_subnet_facts:
+        region: "{{ whc_region }}"
+        filters:
+          "tag:Name": "whc-{{ targetenv }}-{{ whc_region }}"
+      register: vpc_subnet_facts
+
+
+    - name: Fetching VPC Facts
+      ec2_vpc_net_facts:
+        region: "{{ whc_region }}"
+        filters:
+          "tag:Name": "whc-{{ targetenv }}-{{ whc_region }}"
+          cidr: "{{ whc_cidrblock }}"
+      register: vpc_facts
+
+    - debug:
+        msg: "vpc id: {{ vpc_facts.vpcs[0].id }}"
+      when: vpc_facts is defined
+
+    - name: Fetching VPC Subnet Facts
+      ec2_vpc_subnet_facts:
+        region: "{{ whc_region }}"
+        filters:
+          vpc-id: "{{ vpc_facts.vpcs[0].id }}"
+      register: vpc_subnet_facts
+
+    - debug:
+        msg: "subnets  {{ vpc_subnet_facts }}"
+      when: vpc_subnet_facts is defined
+
+    - name: Removing VPC Subnets
+      local_action:
+        module: ec2_vpc_subnet
+        region: "{{ whc_region }}"
+        state: absent
+        vpc_id: "{{ vpc_facts.vpcs[0].id }}"
+        cidr: "{{ item.cidr_block }}" 
+      with_items: "{{ vpc_subnet_facts.subnets }}"
+    
+
+    - name: Removing VPC
+      local_action:
+        module: ec2_vpc_net
+        region: "{{ whc_region }}"
+        state: absent
+        name: "whc-{{ targetenv }}-{{ whc_region }}"
+        cidr_block: "{{ whc_cidrblock }}"
+      when: vpc_facts is defined
