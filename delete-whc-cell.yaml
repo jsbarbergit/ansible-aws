@@ -7,6 +7,10 @@
   vars_files:
     - "vars/whc-cell/{{ targetenv }}.yaml"
 
+  vars:
+    vpc_name: "whc-{{ targetenv }}-{{ whc_region }}"
+    key_name: "{{ vpc_name }}-key"
+
   pre_tasks:
     - name: Validate environment value was passed
       fail: msg="ERROR --- A valid targetenv value was not passed in extra-vars. Valid values are listed in group_vars/all"
@@ -18,7 +22,7 @@
       ec2_vpc_net_facts:
         region: "{{ whc_region }}"
         filters:
-          "tag:Name": "whc-{{ targetenv }}-{{ whc_region }}"
+          "tag:Name": "{{ vpc_name }}"
           cidr: "{{ whc_cidrblock }}"
       ignore_errors: 'yes'
       register: vpc_facts
@@ -39,20 +43,19 @@
         cidr: "{{ item.cidr_block }}" 
       ignore_errors: 'yes'
       with_items: "{{ vpc_subnet_facts.subnets }}"
-    
 
     - name: Removing VPC
       ec2_vpc_net:
         region: "{{ whc_region }}"
         state: absent
-        name: "whc-{{ targetenv }}-{{ whc_region }}"
+        name: "{{ vpc_name }}" 
         cidr_block: "{{ whc_cidrblock }}"
-      ignore_errors: 'yes'
+      #ignore_errors: 'yes'
       when: vpc_facts is defined
 
     - name: Removing VPC Associated EC2 Key Pair
       ec2_key:
-        name: "whc-{{ targetenv }}-{{ whc_region }}-key"
+        name: "{{ key_name }}"
         state: absent
         region: "{{ whc_region }}"
       ignore_errors: 'yes'

@@ -8,6 +8,6 @@
     region: "{{whc_region }}"
     cidr: "{{ item.cidr }}"
     resource_tags:
-      Name: "whc-{{ targetenv }}-{{ whc_region }}-{{ item.name }}"
+      Name: "{{ vpc_name }}-{{ item.name }}"
   with_items: "{{ whc_core_subnets }}"
   when: whc_state == "present"
