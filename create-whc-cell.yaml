@@ -23,5 +23,19 @@
     vpc_name: "whc-{{ targetenv }}-{{ whc_region }}"
     vpc_cidrblock: "{{ whc_cidrblock }}"
     vpc_region: "{{ whc_region }}"
-    vpc_state: "{{ whc_state }}"
+    state: "{{ whc_state }}"
     multi_ok: no
+    key_name: "whc-{{ targetenv }}-{{ whc_region }}-key"
+
+  tasks:
+  - name: Print New EC2 Key Pair Private Key
+    debug:
+      msg: "New EC2 Key Pair for VPC = {{ ec2_private_key.key.name }}"
+    when: ec2_private_key.key.private_key is defined
+
+  - name: Save Private Key to File
+    copy:
+      content: "{{ ec2_private_key.key.private_key }}"
+      dest: "{{ whc_keydir }}/whc-{{ targetenv }}-{{ whc_region }}-key.private_key"
+      mode: 0600
+    when: ec2_private_key.key.private_key is defined and whc_savekeys == 'yes'

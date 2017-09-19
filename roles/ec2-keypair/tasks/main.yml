@@ -1,0 +1,8 @@
+---
+# tasks file for ec2-keypair
+- name: Create a new EC2 Key pair
+  ec2_key:
+    state: "{{ state }}"
+    name: "{{ key_name }}"
+    region: "{{ vpc_region }}"
+  register: ec2_private_key

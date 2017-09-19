@@ -2,7 +2,7 @@
 # tasks file for vpc
 - name: Create AWS VPC
   ec2_vpc_net:
-    state: "{{ vpc_state }}"
+    state: "{{ state }}"
     region: "{{ vpc_region }}"
     name: "{{ vpc_name }}"
     cidr_block: "{{ vpc_cidrblock }}"
