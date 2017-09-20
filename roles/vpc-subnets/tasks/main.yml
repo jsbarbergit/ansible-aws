@@ -5,7 +5,7 @@
   ec2_vpc_subnet:
     state: "{{ state }}"
     vpc_id: "{{ whc_vpc.vpc.id }}"
-    region: "{{whc_region }}"
+    region: "{{ whc_region }}"
     cidr: "{{ item.cidr }}"
     resource_tags:
       Name: "{{ vpc_name }}-{{ item.name }}"

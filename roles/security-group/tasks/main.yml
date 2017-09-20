@@ -1,0 +1,24 @@
+---
+# tasks file for security-group
+- name: Create Security Groups
+  ec2_group:
+    name: "{{ item.key }}"
+    description: "{{ item.value.sg_desc }}"
+    vpc_id: "{{ whc_vpc.vpc.id }}"
+    region: "{{ whc_region }}"
+    purge_rules: "{{ item.value.sg_purgein }}"
+    purge_rules_egress: "{{ item.value.sg_purgeout }}"
+    rules: "{{ item.value.sg_rules.ingress }}"
+    rules_egress: "{{ item.value.sg_rules.egress }}"
+  register: new_sg_id
+  with_dict: "{{ whc_core_sgs }}"
+
+#With Ansible >=2.4 sg resources can be tagged at create time
+- name: Tag Security Groups
+  ec2_tag:
+    resource: "{{ item.group_id }}"
+    region: "{{ whc_region }}"
+    state: present
+    tags:
+      Name: "{{ item.invocation.module_args.name }}"
+  with_items: "{{ new_sg_id.results }}"

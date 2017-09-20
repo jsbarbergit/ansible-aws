@@ -6,3 +6,27 @@ whc_core_subnets:
   - {name: "private", cidr: "10.124.1.0/24", description: "WHC POC Private Subnet"}
 whc_savekeys: 'yes'
 whc_keydir: '~/aws-keypairs/'
+
+#Define VPC Common Security Groups Ingress Rules
+whc_core_sgs:
+  whc_poc_core_sg1:
+    sg_desc: 'WHC POC Core Security Group 1'
+    sg_purgein: 'true'
+    sg_purgeout: 'true'
+    #Rules
+    sg_rules:
+      ingress: []
+       #examples below - remove [] above and uncomment to use
+       # - { proto: 'tcp', from_port: '80', to_port: '80', cidr_ip: "{{ whc_cidrblock }}" }
+       # - { proto: 'tcp', from_port: '8080', to_port: '8080', cidr_ip: "{{ whc_cidrblock }}" }
+      egress: []
+        #- { proto: 'icmp', from_port: '-1', to_port: '-1', cidr_ip: "{{ whc_cidrblock }}" }
+
+  whc_poc_core_sg2:
+    sg_desc: 'WHC POC Core Security Group 2'
+    sg_purgein: 'true'
+    sg_purgeout: 'true'
+    sg_purgetags: 'true'
+    sg_rules:
+      ingress: []
+      egress: []
