@@ -17,7 +17,6 @@
       fail: msg="ERROR --- A valid targetenv value was not passed in extra-vars. Valid values are listed in group_vars/all"
       when: targetenv is not defined or (targetenv is defined and targetenv not in environments)
 
-
   roles:
   - name: Create a WHC Cell
     role: whc-cell
@@ -25,16 +24,3 @@
     vpc_region: "{{ whc_region }}"
     state: "{{ whc_state }}"
     multi_ok: no
-
-  tasks:
-  - name: Print New EC2 Key Pair Private Key
-    debug:
-      msg: "New EC2 Key Pair for VPC = {{ ec2_private_key.key.name }}"
-    when: ec2_private_key.key.private_key is defined
-
-  - name: Save Private Key to File
-    copy:
-      content: "{{ ec2_private_key.key.private_key }}"
-      dest: "{{ whc_keydir }}/{{ key_name }}.private_key"
-      mode: 0600
-    when: ec2_private_key.key.private_key is defined and whc_savekeys == 'yes'
