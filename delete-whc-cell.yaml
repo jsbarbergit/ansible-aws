@@ -35,6 +35,24 @@
       ignore_errors: 'yes'
       register: vpc_subnet_facts
 
+    - name: Fetching VPC Security Groups
+      ec2_group_facts:
+        region: "{{ whc_region }}"
+        filters:
+          vpc-id: "{{ vpc_facts.vpcs[0].id }}"
+      ignore_errors: 'yes'
+      register: vpc_sg_facts
+        
+    # This will throw an error as it will try and remove default SGs. This will fail, but they are reomved with VPC
+    - name: Removing VPC Security Groups
+      ec2_group:
+        region: "{{ whc_region }}"
+        state: absent
+        vpc_id: "{{ vpc_facts.vpcs[0].id }}"
+        name: "{{ item.group_name }}"
+      ignore_errors: 'yes'
+      with_items: "{{ vpc_sg_facts.security_groups }}"
+
     - name: Removing VPC Subnets
       ec2_vpc_subnet:
         region: "{{ whc_region }}"
