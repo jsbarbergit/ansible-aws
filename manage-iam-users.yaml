@@ -15,10 +15,23 @@
       fail: msg="ERROR --- A valid awsaccount value was not passed in extra-vars. Valid values are listed in group_vars/all"
       when: awsaccount is not defined or (awsaccount is defined and awsaccount not in awsaccounts)
 
+    # Override default state value if passed
+    - set_fact:
+         state: "{{ userstate }}"
+      when: userstate is defined
+
+    - set_fact:
+         state: 'present'
+      when: userstate is not defined
+
   #Make this apply all or specific user - this will set the users
+  
+  tasks:
+  - name: Debug
+    debug:
+      msg: "state --- {{ state }}"
 
   roles:
   - name: Manage IAM Users
     role: manage-iam-user
     users: "{{ iam_users }}"
-    state: 'present'
