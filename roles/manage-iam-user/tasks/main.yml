@@ -6,4 +6,4 @@
     name: "{{ item.key }}"
     state: "{{ state }}"
     update_password: 'on_create'
-  with_dict: "{{ users }}"
+  with_dict: "{{ managed_users }}"

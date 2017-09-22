@@ -6,7 +6,7 @@
   gather_facts: no
 
   vars_files:
-    - "iam/groups/{{ awsaccount }}/groups.yaml"
+    - "iam/roles/{{ awsaccount }}/roles.yaml"
 
   vars: []
 
@@ -17,17 +17,15 @@
 
     # Override default state value if passed
     - set_fact:
-         state: "{{ groupstate }}"
-      when: groupstate is defined
+         state: "{{ rolestate }}"
+      when: rolestate is defined
 
     - set_fact:
          state: 'present'
-      when: groupstate is not defined
+      when: rolestate is not defined
 
   #Make this apply all specific group
   roles:
-  - name: Manage IAM Groups
-    role: manage-iam-group
-    grp_purge_users: 'true'
-    grp_purge_policies: 'true'
-    managed_groups: "{{ iam_groups }}"
+  - name: Manage IAM Roles
+    role: manage-iam-role
+    managed_roles: "{{ iam_roles }}"

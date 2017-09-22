@@ -1,5 +1,0 @@
-iam_roles:
-  web-server:
-    policies: []
-  db-server:
-    policies: []

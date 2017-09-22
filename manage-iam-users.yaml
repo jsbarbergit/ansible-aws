@@ -6,7 +6,7 @@
   gather_facts: no
 
   vars_files:
-    - "vars/iam/{{ awsaccount }}/users.yaml"
+    - "iam/users/{{ awsaccount }}/users.yaml"
 
   vars: []
 
@@ -25,13 +25,7 @@
       when: userstate is not defined
 
   #Make this apply all or specific user - this will set the users
-  
-  tasks:
-  - name: Debug
-    debug:
-      msg: "state --- {{ state }}"
-
   roles:
   - name: Manage IAM Users
     role: manage-iam-user
-    users: "{{ iam_users }}"
+    managed_users: "{{ iam_users }}"

@@ -8,4 +8,4 @@
     purge_users: "{{ grp_purge_users }}"
     purge_policy: "{{ grp_purge_policies }}"
     users: "{{ item.value.members }}"
-  with_dict: "{{ iam_groups }}"
+  with_dict: "{{ managed_groups }}"

@@ -1,0 +1,15 @@
+---
+# tasks file for manage-iam-group
+- name: Create STS Assume Policy Doc From Template for All Reqd Services
+  template:
+    src: 'roles/manage-iam-role/templates/assumerole.json.j2'
+    dest: "roles/manage-iam-role/files/{{ item.value.sts_assume_service }}-assumerole.json"
+  with_dict: "{{ managed_roles }}"
+
+- name: Apply IAM Role Config
+  iam_role:
+    name: "{{ item.key }}"
+    state: "{{ state }}"
+    assume_role_policy_document: "{{ lookup('file', '{{ item.value.sts_assume_service }}-assumerole.json') }}"
+    managed_policy: "{{ item.value.policies }}"
+  with_dict: "{{ managed_roles }}"

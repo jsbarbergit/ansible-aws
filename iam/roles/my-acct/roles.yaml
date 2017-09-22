@@ -1,0 +1,9 @@
+iam_roles:
+  webserver:
+    #Which AWS service can assume this role
+    sts_assume_service: 'ec2'
+    #List of managed policies to attach to the role (must exist)
+    policies: []
+  dbserver:
+    sts_assume_service: 'lambda'
+    policies: []
