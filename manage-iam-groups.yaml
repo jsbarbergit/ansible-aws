@@ -6,7 +6,7 @@
   gather_facts: no
 
   vars_files:
-    - "vars/iam/{{ awsaccount }}/users.yaml"
+    - "vars/iam/{{ awsaccount }}/groups.yaml"
 
   vars: []
 
@@ -17,14 +17,14 @@
 
     # Override default state value if passed
     - set_fact:
-         state: "{{ userstate }}"
-      when: userstate is defined
+         state: "{{ groupstate }}"
+      when: groupstate is defined
 
     - set_fact:
          state: 'present'
-      when: userstate is not defined
+      when: groupstate is not defined
 
-  #Make this apply all or specific user - this will set the users
+  #Make this apply all specific group
   
   tasks:
   - name: Debug
@@ -32,6 +32,7 @@
       msg: "state --- {{ state }}"
 
   roles:
-  - name: Manage IAM Users
-    role: manage-iam-user
-    users: "{{ iam_users }}"
+  - name: Manage IAM Groups
+    role: manage-iam-group
+    grp_purge_users: 'true'
+    grp_purge_policies: 'true'

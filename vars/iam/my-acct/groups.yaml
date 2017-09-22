@@ -1,0 +1,6 @@
+iam_groups:
+  net-admin: 
+    members:
+      - alan
+  srv-admin:
+    members: []

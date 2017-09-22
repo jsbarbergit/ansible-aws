@@ -1,0 +1,11 @@
+---
+# tasks file for manage-iam-group
+
+- name: Apply IAM Group Config
+  iam_group:
+    name: "{{ item.key }}"
+    state: "{{ state }}"
+    purge_users: "{{ grp_purge_users }}"
+    purge_policy: "{{ grp_purge_policies }}"
+    users: "{{ item.value.members }}"
+  with_dict: "{{ iam_groups }}"
