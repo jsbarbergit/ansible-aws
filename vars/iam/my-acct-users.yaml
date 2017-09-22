@@ -1,0 +1,7 @@
+iam_users:
+  alan:
+    groups:
+      - net-admin
+  bob:
+    groups:
+      - srv-admin

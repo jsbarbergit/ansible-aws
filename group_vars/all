@@ -11,3 +11,6 @@ environments:
   pp2: []
   pp3: []
   prd: []
+awsaccounts:
+  my-acct: []
+  wh-acct: []

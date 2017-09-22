@@ -1,0 +1,24 @@
+# vim:ff=unix ts=2 sw=2 ai expandtab
+
+- hosts: localhost
+  connection: local
+  remote_user: ec2-user
+  gather_facts: no
+
+  vars_files:
+    - "vars/iam/{{ awsaccount }}-users.yaml"
+
+  vars: []
+
+  pre_tasks: 
+    - name: Validate AWS Account value was passed
+      fail: msg="ERROR --- A valid awsaccount value was not passed in extra-vars. Valid values are listed in group_vars/all"
+      when: awsaccount is not defined or (awsaccount is defined and awsaccount not in awsaccounts)
+
+  #Make this apply all or specific user - this will set the users
+
+  roles:
+  - name: Manage IAM Users
+    role: manage-iam-user
+    users: "{{ iam_users }}"
+    state: 'present'

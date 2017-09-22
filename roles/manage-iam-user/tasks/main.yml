@@ -1,0 +1,9 @@
+---
+# tasks file for manage-iam-user
+- name: Apply IAM User Config
+  iam:
+    iam_type: user
+    name: "{{ item.key }}"
+    state: "{{ state }}"
+    update_password: 'on_create'
+  with_dict: "{{ users }}"

@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: J.Barber
-  description: Create and manage an AWS Security Group
+  description: Manage an AWS IAM User
   company: William Hill Plc
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
@@ -14,7 +14,7 @@ galaxy_info:
   # - Apache
   # - CC-BY
   license: license (GPLv2, CC-BY, etc)
-  min_ansible_version: 2.4
+  min_ansible_version: 2.2
   #
   # Below are all platforms currently available. Just uncomment
   # the ones that apply to your role. If you don't see your
