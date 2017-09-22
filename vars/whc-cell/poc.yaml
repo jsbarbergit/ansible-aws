@@ -2,8 +2,8 @@ whc_region: eu-west-2
 whc_cidrblock: 10.124.0.0/17
 whc_state: present
 whc_core_subnets:
-  - {name: "public", cidr: "10.124.0.0/24", description: "WHC POC Public Subnet"}
-  - {name: "private", cidr: "10.124.1.0/24", description: "WHC POC Private Subnet"}
+  - {name: "public", cidr: "10.124.0.0/24", az: "{{ whc_region }}a", description: "WHC POC Public Subnet"}
+  - {name: "private", cidr: "10.124.1.0/24", az: "{{ whc_region }}b", description: "WHC POC Private Subnet"}
 whc_savekeys: 'yes'
 whc_keydir: '~/aws-keypairs/'
 
@@ -13,6 +13,7 @@ whc_core_sgs:
     sg_desc: 'WHC POC Core Security Group 1'
     sg_purgein: 'true'
     sg_purgeout: 'true'
+    sg_purgetags: 'yes'
     #Rules
     sg_rules:
       ingress: []
@@ -21,6 +22,11 @@ whc_core_sgs:
        # - { proto: 'tcp', from_port: '8080', to_port: '8080', cidr_ip: "{{ whc_cidrblock }}" }
       egress: []
         #- { proto: 'icmp', from_port: '-1', to_port: '-1', cidr_ip: "{{ whc_cidrblock }}" }
+    tags:
+      Name: 'wh_poc_core_sg1'
+      Environment: "{{ targetenv }}"
+      Purpose: 'A test purpose'
+      
 
   whc_poc_core_sg2:
     sg_desc: 'WHC POC Core Security Group 2'
@@ -30,3 +36,6 @@ whc_core_sgs:
     sg_rules:
       ingress: []
       egress: []
+    tags:
+      Name: 'wh_poc_core_sg2'
+      Environment: "{{ targetenv }}"

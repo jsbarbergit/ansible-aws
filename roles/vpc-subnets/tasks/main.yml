@@ -7,6 +7,7 @@
     vpc_id: "{{ whc_vpc.vpc.id }}"
     region: "{{ whc_region }}"
     cidr: "{{ item.cidr }}"
+    az: "{{ item.az }}"
     resource_tags:
       Name: "{{ vpc_name }}-{{ item.name }}"
   with_items: "{{ whc_core_subnets }}"
